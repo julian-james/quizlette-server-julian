@@ -26,6 +26,17 @@ async function show(req, res) {
 async function create(req, res) {
     try {
         let item = req.body
+
+
+        // TRYING TO REJECT USERS WITH NAMES THAT ALREADY EXIST
+        const existingUser = await User.findOne({ Name: item.name /*??????????????*/ });
+        if (existingUser) {
+          return res
+            .status(400)
+            .json({ msg: "This user already exists" });
+        }
+
+
         let data = await new UsersMod(item)
         data.save() 
         res.status(201).json({message: "added data"})
